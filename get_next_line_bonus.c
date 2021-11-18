@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ytaya <ytaya@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/17 15:04:24 by ytaya             #+#    #+#             */
-/*   Updated: 2021/11/19 00:10:26 by ytaya            ###   ########.fr       */
+/*   Updated: 2021/11/19 00:11:07 by ytaya            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 void	ft_free(char **str)
 {
@@ -31,7 +31,7 @@ void	ft_get_line(char **rest, char **line)
 		*line = ft_substr(*rest, 0, ++i);
 		temp = *rest;
 		*rest = ft_strdup(*rest + i);
-		ft_free(&temp);
+		free(temp);
 	}
 	else
 	{
@@ -62,7 +62,7 @@ void	ft_read(int fd, char **rest, char **line, char **buffer)
 
 char	*get_next_line(int fd)
 {
-	static char	*rest;
+	static char	*rest[OPEN_MAX];
 	char		*line;
 	char		*buffer;
 
@@ -76,8 +76,8 @@ char	*get_next_line(int fd)
 		ft_free(&buffer);
 		return (NULL);
 	}
-	if (!rest)
-		rest = ft_strdup("");
-	ft_read(fd, &rest, &line, &buffer);
+	if (!rest[fd])
+		rest[fd] = ft_strdup("");
+	ft_read(fd, &rest[fd], &line, &buffer);
 	return (line);
 }
